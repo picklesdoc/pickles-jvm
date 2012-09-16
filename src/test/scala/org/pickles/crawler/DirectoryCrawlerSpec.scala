@@ -24,11 +24,11 @@ import org.apache.commons.vfs.VFS
 @RunWith(classOf[JUnitRunner])
 class DirectoryCrawlerSpec extends FunSpec {
   describe("A Directory Crawler") {
-    it("should find determine feature files as relevant content") {
+    it("should be able to find all feature files") {
       pending
     }
 
-    it("should determine markdown files as relevant content")(pending)
+    it("should be able to find all markdown files")(pending)
     it("should find feature files deeper in the tree hierarchy")(pending)
     it("should find ignore folders that have no relevant content")(pending)
   }
