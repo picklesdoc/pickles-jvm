@@ -27,7 +27,7 @@ class RelevantFileDeterminer {
   def isRelevant(file: FileObject) = {
     file.getType() match {
       case FileType.FOLDER => false
-      case FileType.FILE => file.getName().getExtension() match {
+      case FileType.FILE => file.getName().getExtension().toLowerCase() match {
         case ".feature" => true
         case ".markdown" => true
         case ".mdown" => true
