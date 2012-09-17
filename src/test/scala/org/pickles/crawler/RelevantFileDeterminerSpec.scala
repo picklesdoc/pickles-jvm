@@ -110,10 +110,10 @@ class RelevantFileDeterminerSpec extends FunSpec with ShouldMatchers {
 
     it("should determine folders are not relevant") {
       val builder = FileSystemBuilder.build()
-      val file = builder.addFolder("ram://features/")
+      val folder = builder.addFolder("ram://features/")
 
       val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(false)
+      relevantFileDetector.isRelevant(folder) should be(false)
     }
 
   }
