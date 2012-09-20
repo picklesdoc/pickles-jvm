@@ -30,90 +30,91 @@ class RelevantFileDeterminerSpec extends FunSpec with ShouldMatchers {
   describe("A RelevantFileDeterminer") {
     it("should determine file with an extension of .feature are relevant") {
       val builder = FileSystemBuilder.build()
+      builder.addFolder("ram://features/")
       val file = builder.addFile("ram://features/my.feature")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .markdown are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.markdown")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .mdown are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.mdown")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .mkdn are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.mkdn")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .md are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.md")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .mdwn are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.mdwn")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .mdtxt are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.mdtxt")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .mdtext are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.mdtext")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .text are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.text")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine file with an extension of .txt are relevant") {
       val builder = FileSystemBuilder.build()
       val file = builder.addFile("ram://features/my.txt")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(file) should be(true)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(file) should be(true)
     }
 
     it("should determine folders are not relevant") {
       val builder = FileSystemBuilder.build()
       val folder = builder.addFolder("ram://features/")
 
-      val relevantFileDetector = new RelevantFileDeterminer()
-      relevantFileDetector.isRelevant(folder) should be(false)
+      val relevantFileDeterminer = new RelevantFileDeterminer()
+      relevantFileDeterminer.isRelevant(folder) should be(false)
     }
 
   }

@@ -28,16 +28,16 @@ class RelevantFileDeterminer {
     file.getType() match {
       case FileType.FOLDER => false
       case FileType.FILE => file.getName().getExtension().toLowerCase() match {
-        case ".feature" => true
-        case ".markdown" => true
-        case ".mdown" => true
-        case ".mkdn" => true
-        case ".md" => true
-        case ".mdwn" => true
-        case ".mdtxt" => true
-        case ".mdtext" => true
-        case ".text" => true
-        case ".txt" => true
+        case "feature" => true
+        case "markdown" => true
+        case "mdown" => true
+        case "mkdn" => true
+        case "md" => true
+        case "mdwn" => true
+        case "mdtxt" => true
+        case "mdtext" => true
+        case "text" => true
+        case "txt" => true
         case _ => false
       }
       case _ => false
