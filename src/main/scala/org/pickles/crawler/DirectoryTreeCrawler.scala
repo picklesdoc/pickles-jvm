@@ -17,6 +17,7 @@
 package org.pickles.crawler
 
 import org.apache.commons.vfs.FileObject
+import org.apache.commons.vfs.FileType
 
 /**
  * @author jeffrey
@@ -27,44 +28,23 @@ class DirectoryTreeCrawler {
     crawl(rootPath, None)
   }
 
-  def crawl(rootPath: FileObject, rootNode: Option[TreeItem]): TreeItem = {
-    null
-    //    val currentNode = featureNodeFactory.Create(rootNode != null ? rootNode.OriginalLocation : null, directory);
-    //    var newRootNode = rootNode.map {Some(_)}
+  def crawl(rootPath: FileObject, rootNode: Option[Folder]): TreeItem = {
+    // TODO - implement logic to determine if any relevant files were found in this directory tree or not
+    val currentNode = Folder(rootPath, rootNode)
 
-    //    var tree = new GeneralTree<IDirectoryTreeNode>(currentNode);
-    //
-    //    bool isRelevantFileFound = false;
-    //    foreach (FileInfo file in directory.GetFiles().Where(file => relevantFileDetector.IsRelevant(file)))
-    //    {
-    //        isRelevantFileFound = true;
-    //
-    //        IDirectoryTreeNode node = null;
-    //        try
-    //        {
-    //            node = featureNodeFactory.Create(rootNode.OriginalLocation, file);
-    //        }
-    //        catch (Exception)
-    //        {     
-    //            if (log.IsWarnEnabled) log.WarnFormat("The file, {0}, will be ignored because it could not be read in properly", file.FullName);
-    //        }
-    //
-    //        if (node != null) tree.Add(node);
-    //    }
-    //
-    //    bool isRelevantDirectoryFound = false;
-    //    foreach (DirectoryInfo subDirectory in directory.GetDirectories())
-    //    {
-    //        GeneralTree<IDirectoryTreeNode> subTree = Crawl(subDirectory, rootNode);
-    //        if (subTree != null)
-    //        {
-    //            isRelevantDirectoryFound = true;
-    //            tree.Add(subTree);
-    //        }
-    //    }
-    //
-    //    if (!isRelevantFileFound && !isRelevantDirectoryFound) return null;
-    //
-    //    return tree;
+    val newRootNode: Option[Folder] = rootNode match {
+      case None => Some(currentNode)
+      case Some(_) => rootNode
+    }
+
+    var isRelevantFileFound = true
+    rootPath.getChildren().foreach(child => {
+      child.getType() match {
+        case FileType.FOLDER => currentNode.addChild(crawl(child, Some(currentNode)))
+        case FileType.FILE => currentNode.addChild(File(child, currentNode))
+      }
+    })
+
+    currentNode
   }
 }

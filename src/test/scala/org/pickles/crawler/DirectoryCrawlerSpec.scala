@@ -16,20 +16,44 @@
 
 package org.pickles.crawler
 
-import org.scalatest.FunSpec
 import org.junit.runner.RunWith
+import org.scalatest.FunSpec
 import org.scalatest.junit.JUnitRunner
-import org.apache.commons.vfs.VFS
+import org.scalatest.matchers.ShouldMatchers
 
 @RunWith(classOf[JUnitRunner])
-class DirectoryCrawlerSpec extends FunSpec {
+class DirectoryCrawlerSpec extends FunSpec with ShouldMatchers {
   describe("A Directory Crawler") {
-    it("should be able to find all feature files") {
-      pending
-    }
+    it("should be able to scan a directory hierarchy, picking out relevant files") {
+      val builder = FileSystemBuilder.build()
+      val featuresObject = builder.addFolder("ram://features/")
+      builder.addFile("ram://features/index.markdown")
+      builder.addFile("ram://features/a.feature")
+      builder.addFolder("ram://features/other/")
+      builder.addFile("ram://features/other/context.markdown")
+      builder.addFile("ram://features/other/b.feature")
 
-    it("should be able to find all markdown files")(pending)
-    it("should find feature files deeper in the tree hierarchy")(pending)
-    it("should find ignore folders that have no relevant content")(pending)
+      val directoryTreeCrawler = new DirectoryTreeCrawler
+      val rootItem = directoryTreeCrawler.crawl(featuresObject)
+
+      rootItem.isInstanceOf[Folder] should be(true)
+      rootItem.children should have size (3)
+
+      val indexMarkdown = rootItem.children.find(_.getName() == "index.markdown").head
+      indexMarkdown.isInstanceOf[MarkdownFile] should be(true)
+
+      val aFeature = rootItem.children.find(_.getName() == "a.feature").head
+      aFeature.isInstanceOf[FeatureFile] should be(true)
+
+      val otherFolder = rootItem.children.find(_.getName() == "other").head
+      otherFolder.isInstanceOf[Folder] should be(true)
+      otherFolder.children should have size (2)
+
+      val contextMarkdown = otherFolder.children.find(_.getName() == "context.markdown").head
+      contextMarkdown.isInstanceOf[MarkdownFile] should be(true)
+
+      val bFeature = otherFolder.children.find(_.getName() == "b.feature").head
+      contextMarkdown.isInstanceOf[FeatureFile] should be(true)
+    }
   }
 }

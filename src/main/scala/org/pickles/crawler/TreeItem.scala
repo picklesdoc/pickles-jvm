@@ -24,8 +24,12 @@ import org.apache.commons.vfs.FileObject
 import org.apache.commons.vfs.FileType
 
 trait TreeItem {
+  var children: List[TreeItem] = List()
   def getName(): String
   def getParent(): Option[TreeItem]
+  def getChildren(): Seq[TreeItem] = children
+
+  def addChild(child: TreeItem) = children ::= child
 
   def findCommonAncestor(other: TreeItem): Option[TreeItem] = {
     val thisHierarchy = getHierarchy()
