@@ -17,6 +17,7 @@
 package org.pickles.crawler
 
 import org.apache.commons.vfs.FileObject
+import org.pickles.features.model.Feature
 
 abstract class File(fileObject: FileObject, parent: Folder) extends TreeItem {
   def getName(): String = {
@@ -25,5 +26,23 @@ abstract class File(fileObject: FileObject, parent: Folder) extends TreeItem {
 
   def getParent(): Option[TreeItem] = {
     Some(parent)
+  }
+}
+
+object File {
+  def apply(file: FileObject, parent: Folder) = {
+    file.getName().getExtension() match {
+      case "feature" => FeatureFile(file, parent, null)
+      case "markdown" => MarkdownFile(file, parent, null)
+      case "mdown" => MarkdownFile(file, parent, null)
+      case "mkdn" => MarkdownFile(file, parent, null)
+      case "md" => MarkdownFile(file, parent, null)
+      case "mdwn" => MarkdownFile(file, parent, null)
+      case "mdtxt" => MarkdownFile(file, parent, null)
+      case "mdtext" => MarkdownFile(file, parent, null)
+      case "text" => MarkdownFile(file, parent, null)
+      case "txt" => MarkdownFile(file, parent, null)
+      case _ => MarkdownFile(file, parent, null)
+    }
   }
 }

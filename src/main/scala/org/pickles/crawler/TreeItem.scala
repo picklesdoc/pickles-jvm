@@ -20,6 +20,8 @@ import java.util.ArrayList
 import scala.collection.mutable.ListBuffer
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import scala.util.control.Breaks._
+import org.apache.commons.vfs.FileObject
+import org.apache.commons.vfs.FileType
 
 trait TreeItem {
   def getName(): String
@@ -53,5 +55,23 @@ trait TreeItem {
     }
 
     hierarchy
+  }
+}
+
+object TreeItem {
+  val relevantFileDeterminer = new RelevantFileDeterminer
+
+  def apply(file: FileObject): TreeItem = {
+    apply(file, None)
+  }
+
+  def apply(file: FileObject, parent: Option[Folder]): TreeItem = {
+    file.getType() match {
+      case FileType.FOLDER => Folder(file, parent)
+      case FileType.FILE => relevantFileDeterminer.isRelevant(file) match {
+        case false => throw IrrelevantFileException(file)
+        case true => File(file, parent.getOrElse(null))
+      }
+    }
   }
 }
