@@ -28,7 +28,7 @@ import org.pickles.features.model.ScenarioOutline
  * @author jeffrey
  *
  */
-class FeatureParser extends Listener {
+class PicklesListener extends Listener {
 
   var keyword: String = _
   var name: String = _
@@ -53,7 +53,7 @@ class FeatureParser extends Listener {
   }
 
   def tag(tag: String, line: Integer) = {
-    this.tags ::= tag
+    PicklesListener.this.tags ::= tag
   }
 
   def feature(keyword: String, name: String, description: String, line: Integer) = {
