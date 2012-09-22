@@ -53,7 +53,7 @@ class DirectoryCrawlerSpec extends FunSpec with ShouldMatchers {
       contextMarkdown.isInstanceOf[MarkdownFile] should be(true)
 
       val bFeature = otherFolder.children.find(_.getName() == "b.feature").head
-      contextMarkdown.isInstanceOf[FeatureFile] should be(true)
+      bFeature.isInstanceOf[FeatureFile] should be(true)
     }
   }
 }
