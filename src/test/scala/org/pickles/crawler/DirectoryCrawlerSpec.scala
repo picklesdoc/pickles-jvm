@@ -34,18 +34,18 @@ class DirectoryCrawlerSpec extends FunSpec with ShouldMatchers {
       builder.addFile("ram://features/other/b.feature")
 
       val directoryTreeCrawler = new DirectoryTreeCrawler
-      val rootItem = directoryTreeCrawler.crawl(featuresObject)
+      val root = directoryTreeCrawler.crawl(featuresObject)
 
-      rootItem.isInstanceOf[Folder] should be(true)
-      rootItem.children should have size (3)
+      root.isInstanceOf[Folder] should be(true)
+      root.children should have size (3)
 
-      val indexMarkdown = rootItem.children.find(_.getName() == "index.markdown").head
+      val indexMarkdown = root.children.find(_.getName() == "index.markdown").head
       indexMarkdown.isInstanceOf[MarkdownFile] should be(true)
 
-      val aFeature = rootItem.children.find(_.getName() == "a.feature").head
+      val aFeature = root.children.find(_.getName() == "a.feature").head
       aFeature.isInstanceOf[FeatureFile] should be(true)
 
-      val otherFolder = rootItem.children.find(_.getName() == "other").head
+      val otherFolder = root.children.find(_.getName() == "other").head
       otherFolder.isInstanceOf[Folder] should be(true)
       otherFolder.children should have size (2)
 

@@ -60,6 +60,11 @@ trait TreeItem {
 
     hierarchy
   }
+
+  def walk(action: (TreeItem) => Unit): Unit = {
+    action(this)
+    children.foreach({ _.walk(action) })
+  }
 }
 
 object TreeItem {
