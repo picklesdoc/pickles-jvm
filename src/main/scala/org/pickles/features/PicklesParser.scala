@@ -34,7 +34,7 @@ class PicklesParser {
     content match {
       case Some(_content) => {
         lexer.scan(_content)
-        listener.getFeature
+        listener.getFeature()
       }
       case None => throw ParseException(file)
     }

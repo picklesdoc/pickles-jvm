@@ -43,7 +43,7 @@ class PicklesListener extends Listener {
   val featureElementState = new FeatureElementState
 
   def getFeature(): Feature = {
-    Feature(name, description, background, scenarios, scenarioOutlines)
+    Feature(name, description, tags, background, scenarios, scenarioOutlines)
   }
 
   def addTagToElement(tag: String) = {
@@ -98,24 +98,32 @@ class PicklesListener extends Listener {
 
   def feature(keyword: String, name: String, description: String, line: Integer) = {
     featureElementState.setFeatureActive
+    this.name = name
+    this.description = description
   }
 
   def background(keyword: String, name: String, description: String, line: Integer) = {
     captureAndStoreRemainingElements
     featureElementState.setBackgroundActive
     backgroundBuilder = new ScenarioBuilder
+    backgroundBuilder.setName(name)
+    backgroundBuilder.setDescription(description)
   }
 
   def scenario(keyword: String, name: String, description: String, line: Integer) = {
     captureAndStoreRemainingElements
     featureElementState.setScenarioActive
     scenarioBuilder = new ScenarioBuilder
+    scenarioBuilder.setName(name)
+    scenarioBuilder.setDescription(description)
   }
 
   def scenarioOutline(keyword: String, name: String, description: String, line: Integer) = {
     captureAndStoreRemainingElements
     featureElementState.setScenarioOutlineActive
     scenarioOutlineBuilder = new ScenarioOutlineBuilder
+    scenarioOutlineBuilder.setName(name)
+    scenarioOutlineBuilder.setDescription(description)
   }
 
   def examples(keyword: String, name: String, description: String, line: Integer) = {

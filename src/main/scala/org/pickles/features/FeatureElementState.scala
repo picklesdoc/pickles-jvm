@@ -21,11 +21,11 @@ package org.pickles.features
  *
  */
 class FeatureElementState {
-  var isFeatureActive: Boolean = _
-  var isBackgroundActive: Boolean = _
-  var isScenarioActive: Boolean = _
-  var isScenarioOutlineActive: Boolean = _
-  var isExampleActive: Boolean = _
+  var isFeatureActive: Boolean = true
+  var isBackgroundActive: Boolean = false
+  var isScenarioActive: Boolean = false
+  var isScenarioOutlineActive: Boolean = false
+  var isExampleActive: Boolean = false
 
   def setExampleActive = isExampleActive = true
 

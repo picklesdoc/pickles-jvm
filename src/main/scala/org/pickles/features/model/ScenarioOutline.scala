@@ -16,7 +16,7 @@
 
 package org.pickles.features.model
 
-class ScenarioOutline(name: String, description: String) extends Taggable with StepContainer {
+class ScenarioOutline(val name: String, val description: String) extends Taggable with StepContainer {
   var feature: Feature = null
   var examples: List[Example] = List()
 

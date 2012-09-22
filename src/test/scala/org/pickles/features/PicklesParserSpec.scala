@@ -7,11 +7,14 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 import org.pickles.crawler.FileSystemBuilder
 import java.io.PrintWriter
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
 /**
  * @author jeffrey
  *
  */
+@RunWith(classOf[JUnitRunner])
 class PicklesParserSpec extends FunSpec with ShouldMatchers {
   describe("A PicklesParser") {
     it("should be able to parse a properly formatted feature file") {
@@ -64,10 +67,39 @@ class PicklesParserSpec extends FunSpec with ShouldMatchers {
       val featureFileOutputStream = featureFile.getContent().getOutputStream()
       val writer = new PrintWriter(featureFileOutputStream)
       writer.write(feature)
+      writer.flush()
+      writer.close()
       featureFileOutputStream.close()
 
       val parser = new PicklesParser()
       val parsedFeature = parser.parse(featureFile)
+
+      parsedFeature should not be (null)
+      parsedFeature.name should equal("A test feature")
+      parsedFeature.description should equal(
+        """In order to ensure all features are properly parsed
+As a developer
+I want to  test the PicklesParser class to ensure it can properly read and parse content from a file""")
+
+      /*parsedFeature.getTags should have size (1)
+      parsedFeature.getTags.head should equal("@accepted")*/
+
+      parsedFeature.background should be('defined)
+      val background = parsedFeature.background.get
+      background should have(
+        'name("Some facts about parsing"),
+        'description("Here is some context about the background"))
+
+      parsedFeature.scenarios should have size (1)
+      parsedFeature.scenarios.head should have(
+        'name("A scenario"),
+        'description("Here is some context about the scenario"))
+
+      parsedFeature.scenarioOutlines should have size (1)
+      parsedFeature.scenarioOutlines.head should have(
+        'name("A scenario outline"),
+        'description("Here is some context about the scenario outline"))
+
     }
   }
 }

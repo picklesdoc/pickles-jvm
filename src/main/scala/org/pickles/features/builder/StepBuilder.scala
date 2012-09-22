@@ -35,10 +35,13 @@ class StepBuilder {
   def setDocString(text: String) = this.docString = Some(text)
 
   def getResult(): Step = {
-    val keywordEnum = Keyword.withName(keyword)
+    val keywordEnum = Keyword.parse(keyword)
     val step = new Step(keywordEnum, keyword, name)
     rows.foreach { step.addRow(_) }
-    if (docString.isDefined) step.setDocString(docString.get)
+    docString match {
+      case Some(content) => step.setDocString(content)
+      case None => Unit
+    }
     step
   }
 }

@@ -23,4 +23,13 @@ object Keyword extends Enumeration {
   val Then = Value("Then")
   val And = Value("And")
   val But = Value("But")
+
+  def parse(text: String) = text.toLowerCase() match {
+    case "given" => Keyword.Given
+    case "when" => Keyword.When
+    case "then" => Keyword.Then
+    case "and" => Keyword.And
+    case "but" => Keyword.But
+    case _ => Keyword.Given // TODO - replace this with an exception
+  }
 }

@@ -18,12 +18,12 @@ package org.pickles.features.model
 
 import java.util.ArrayList
 
-class Feature(name: String, description: String) extends Taggable {
+class Feature(val name: String, val description: String) extends Taggable {
   var scenarios: List[Scenario] = List()
   var scenarioOutlines: List[ScenarioOutline] = List()
-  var background: Scenario = null
+  var background: Option[Scenario] = None
 
-  def setBackground(background: Scenario) = this.background = background
+  def setBackground(background: Scenario) = this.background = Some(background)
   def addScenario(scenario: Scenario) = scenarios ::= scenario
   def addScenarioOutline(scenarioOutline: ScenarioOutline) = scenarioOutlines ::= scenarioOutline
 }
@@ -32,6 +32,7 @@ object Feature {
   def apply(
     name: String,
     description: String,
+    tags: Seq[String],
     optionalBackground: Option[Scenario],
     scenarios: Seq[Scenario],
     scenarioOutlines: Seq[ScenarioOutline]) = {
@@ -40,8 +41,9 @@ object Feature {
       case Some(background) => feature.setBackground(background)
       case None => None
     }
-    scenarios.foreach(scenario => feature.addScenario(scenario))
-    scenarioOutlines.foreach(scenarioOutline => feature.addScenarioOutline(scenarioOutline))
+    tags.foreach { feature.addTag(_) }
+    scenarios.foreach { feature.addScenario(_) }
+    scenarioOutlines.foreach { feature.addScenarioOutline(_) }
     feature
   }
 }

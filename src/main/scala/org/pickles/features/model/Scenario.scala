@@ -20,7 +20,7 @@ package org.pickles.features.model
  * @author jeffrey
  *
  */
-class Scenario(name: String, description: String) extends Taggable with StepContainer {
+class Scenario(val name: String, val description: String) extends Taggable with StepContainer {
   var feature: Feature = null
 
   def setFeature(feature: Feature) {
