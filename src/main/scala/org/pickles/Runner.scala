@@ -4,6 +4,7 @@
 package org.pickles
 
 import org.pickles.crawler.DirectoryTreeCrawler
+import org.pickles.documentation.DocumentationBuilder
 
 /**
  * @author jeffrey
@@ -15,5 +16,7 @@ class Runner {
     val directoryTreeCrawler = new DirectoryTreeCrawler
     val root = directoryTreeCrawler.crawl(configuration.featureFolder)
 
+    val documentationBuilder = DocumentationBuilder(configuration)
+    documentationBuilder.build(root, configuration)
   }
 }
