@@ -16,10 +16,29 @@
 
 package org.pickles.features.builder
 
+import org.pickles.features.model._
+import scala.collection.immutable.List
+
 /**
  * @author jeffrey
  *
  */
 class StepBuilder {
+  var keyword: String = _
+  var name: String = _
+  var rows: List[TableRow] = List()
+  var docString: Option[String] = None
 
+  def setName(name: String) = this.name = name
+  def setKeyword(keyword: String) = this.keyword = keyword
+  def addRow(row: TableRow) = rows ::= row
+  def setDocString(text: String) = this.docString = Some(text)
+
+  def getResult(): Step = {
+    val keywordEnum = Keyword.withName(keyword)
+    val step = new Step(keywordEnum, keyword, name)
+    rows.foreach { step.addRow(_) }
+    if (docString.isDefined) step.setDocString(docString.get)
+    step
+  }
 }

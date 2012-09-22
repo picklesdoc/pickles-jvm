@@ -16,6 +16,9 @@
 
 package org.pickles.features.model
 
+import scala.collection.immutable.List
+import scala.collection.Seq
+
 /**
  * @author jeffrey
  *
@@ -28,7 +31,9 @@ class TableRow {
 }
 
 object TableRow {
-  def apply(cells: String*) = {
+  def apply(cells: java.util.List[String]): TableRow = apply(scala.collection.JavaConversions.asScalaBuffer(cells))
+
+  def apply(cells: Seq[String]) = {
     var row = new TableRow()
     cells.foreach(cell => row.addCell(cell))
     row

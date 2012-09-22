@@ -21,25 +21,43 @@ package org.pickles.features
  *
  */
 class FeatureElementState {
-  var IsBackgroundActive: Boolean = _
-  var IsScenarioActive: Boolean = _
-  var IsScenarioOutlineActive: Boolean = _
+  var isFeatureActive: Boolean = _
+  var isBackgroundActive: Boolean = _
+  var isScenarioActive: Boolean = _
+  var isScenarioOutlineActive: Boolean = _
+  var isExampleActive: Boolean = _
 
-  def SetBackgroundActive() {
-    IsBackgroundActive = true
-    IsScenarioActive = false
-    IsScenarioOutlineActive = false
+  def setExampleActive = isExampleActive = true
+
+  def setFeatureActive() = {
+    isExampleActive = false
+    isFeatureActive = true
+    isBackgroundActive = false
+    isScenarioActive = false
+    isScenarioOutlineActive = false
   }
 
-  def SetScenarioActive() {
-    IsBackgroundActive = false
-    IsScenarioActive = true
-    IsScenarioOutlineActive = false
+  def setBackgroundActive() = {
+    isExampleActive = false
+    isFeatureActive = false
+    isBackgroundActive = true
+    isScenarioActive = false
+    isScenarioOutlineActive = false
   }
 
-  def SetScenarioOutlineActive() {
-    IsBackgroundActive = false
-    IsScenarioActive = false
-    IsScenarioOutlineActive = true
+  def setScenarioActive() = {
+    isExampleActive = false
+    isFeatureActive = false
+    isBackgroundActive = false
+    isScenarioActive = true
+    isScenarioOutlineActive = false
+  }
+
+  def setScenarioOutlineActive() = {
+    isExampleActive = false
+    isFeatureActive = false
+    isBackgroundActive = false
+    isScenarioActive = false
+    isScenarioOutlineActive = true
   }
 }

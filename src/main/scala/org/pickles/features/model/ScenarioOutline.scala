@@ -25,3 +25,13 @@ class ScenarioOutline(name: String, description: String) extends Taggable with S
   def getExamples(): Seq[Example] = examples
   def addExample(example: Example) = this.examples ::= example
 }
+
+object ScenarioOutline {
+  def apply(name: String, description: String, steps: Seq[Step], tags: Seq[String], examples: Seq[Example]) = {
+    val scenario = new ScenarioOutline(name, description)
+    steps.foreach { scenario.addStep(_) }
+    tags.foreach { scenario.addTag(_) }
+    examples.foreach { scenario.addExample(_) }
+    scenario
+  }
+}

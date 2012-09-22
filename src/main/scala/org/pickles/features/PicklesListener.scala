@@ -17,12 +17,9 @@
 package org.pickles.features
 
 import gherkin.lexer.Listener
-import org.pickles.features.builder.ScenarioBuilder
-import org.pickles.features.builder.ScenarioOutlineBuilder
-import org.pickles.features.builder.StepBuilder
-import org.pickles.features.model.Feature
-import org.pickles.features.model.Scenario
-import org.pickles.features.model.ScenarioOutline
+import org.pickles.features.builder._
+import org.pickles.features.model._
+import scala.collection.immutable.List
 
 /**
  * @author jeffrey
@@ -41,6 +38,7 @@ class PicklesListener extends Listener {
   var scenarioBuilder = new ScenarioBuilder
   var scenarioOutlineBuilder = new ScenarioOutlineBuilder
   var stepBuilder = new StepBuilder
+  var exampleBuilder = new ExampleBuilder
 
   val featureElementState = new FeatureElementState
 
@@ -48,40 +46,109 @@ class PicklesListener extends Listener {
     Feature(name, description, background, scenarios, scenarioOutlines)
   }
 
+  def addTagToElement(tag: String) = {
+    if (featureElementState.isBackgroundActive) {
+      backgroundBuilder.addTag(tag)
+    } else if (featureElementState.isScenarioActive) {
+      scenarioBuilder.addTag(tag)
+    } else if (featureElementState.isScenarioOutlineActive) {
+      scenarioOutlineBuilder.addTag(tag)
+    }
+  }
+
+  def addStepToElement(step: Step) = {
+    if (featureElementState.isBackgroundActive) {
+      backgroundBuilder.addStep(step)
+    } else if (featureElementState.isScenarioActive) {
+      scenarioBuilder.addStep(step)
+    } else if (featureElementState.isScenarioOutlineActive) {
+      scenarioOutlineBuilder.addStep(step)
+    }
+  }
+
+  def captureAndStoreRemainingElements() = {
+    if (featureElementState.isBackgroundActive) {
+      backgroundBuilder.addStep(stepBuilder.getResult())
+      background = Some(backgroundBuilder.getResult())
+    } else if (featureElementState.isScenarioActive) {
+      if (stepBuilder != null) scenarioBuilder.addStep(stepBuilder.getResult());
+      scenarios ::= scenarioBuilder.getResult()
+    } else if (featureElementState.isScenarioOutlineActive) {
+      if (stepBuilder != null) scenarioOutlineBuilder.addStep(stepBuilder.getResult());
+      scenarioOutlines ::= scenarioOutlineBuilder.getResult()
+    }
+
+    stepBuilder = null;
+    scenarioBuilder = null;
+    scenarioOutlineBuilder = null;
+    backgroundBuilder = null;
+  }
+
   def comment(comment: String, line: Integer) = {
     // TODO - add searching for meta tags here
   }
 
   def tag(tag: String, line: Integer) = {
-    PicklesListener.this.tags ::= tag
+    if (featureElementState.isFeatureActive) {
+      this.tags ::= tag
+    } else {
+      addTagToElement(tag)
+    }
   }
 
   def feature(keyword: String, name: String, description: String, line: Integer) = {
+    featureElementState.setFeatureActive
   }
 
   def background(keyword: String, name: String, description: String, line: Integer) = {
-    featureElementState.SetBackgroundActive
+    captureAndStoreRemainingElements
+    featureElementState.setBackgroundActive
     backgroundBuilder = new ScenarioBuilder
   }
 
   def scenario(keyword: String, name: String, description: String, line: Integer) = {
-    featureElementState.SetScenarioActive
+    captureAndStoreRemainingElements
+    featureElementState.setScenarioActive
     scenarioBuilder = new ScenarioBuilder
   }
 
   def scenarioOutline(keyword: String, name: String, description: String, line: Integer) = {
-    featureElementState.SetScenarioOutlineActive
+    captureAndStoreRemainingElements
+    featureElementState.setScenarioOutlineActive
     scenarioOutlineBuilder = new ScenarioOutlineBuilder
   }
 
-  def examples(keyword: String, name: String, description: String, line: Integer) = {}
+  def examples(keyword: String, name: String, description: String, line: Integer) = {
+    featureElementState.setExampleActive
+    scenarioOutlineBuilder.addExample(exampleBuilder.getResult())
+    exampleBuilder = new ExampleBuilder
+    exampleBuilder.setName(name)
+    exampleBuilder.setDescription(description)
+  }
 
-  def step(keyword: String, name: String, line: Integer) = {}
+  def step(keyword: String, name: String, line: Integer) = {
+    if (stepBuilder != null) {
+      addStepToElement(stepBuilder.getResult())
+    }
 
-  def row(cells: java.util.List[String], line: Integer) = {}
+    stepBuilder = new StepBuilder
+    stepBuilder.setName(name)
+    stepBuilder.setKeyword(keyword)
+  }
 
-  def docString(contentType: String, content: String, line: Integer) = {}
+  def row(cells: java.util.List[String], line: Integer) = {
+    if (featureElementState.isExampleActive) {
+      exampleBuilder.addRow(TableRow(cells))
+    } else {
+      stepBuilder.addRow(TableRow(cells))
+    }
+  }
 
-  def eof() = {}
+  def docString(contentType: String, content: String, line: Integer) = {
+    stepBuilder.setDocString(content)
+
+  }
+
+  def eof() = { captureAndStoreRemainingElements }
 
 }

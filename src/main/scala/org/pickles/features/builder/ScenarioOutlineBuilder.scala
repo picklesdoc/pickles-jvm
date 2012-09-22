@@ -16,10 +16,24 @@
 
 package org.pickles.features.builder
 
+import org.pickles.features.model._
+import scala.collection.immutable.List
+
 /**
  * @author jeffrey
  *
  */
 class ScenarioOutlineBuilder {
+  var steps: List[Step] = List()
+  var tags: List[String] = List()
+  var examples: List[Example] = List()
+  var description: String = _
+  var name: String = _
 
+  def setName(name: String) = this.name = name
+  def setDescription(description: String) = this.description = description
+  def addStep(step: Step) = this.steps ::= step
+  def addTag(tag: String) = this.tags ::= tag
+  def addExample(example: Example) = this.examples ::= example
+  def getResult(): ScenarioOutline = ScenarioOutline(name, description, steps, tags, examples)
 }

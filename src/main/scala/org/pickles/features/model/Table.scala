@@ -16,13 +16,16 @@
 
 package org.pickles.features.model
 
+import scala.collection.Seq
+import scala.collection.immutable.List
+
 class Table {
   protected var rows: List[TableRow] = List()
   def addRow(row: TableRow) = rows ::= row
 }
 
 object Table {
-  def apply(rows: TableRow*) = {
+  def apply(rows: Seq[TableRow]) = {
     var table = new Table()
     rows.foreach(row => table.addRow(row))
     table
