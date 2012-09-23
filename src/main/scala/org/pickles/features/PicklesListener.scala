@@ -31,6 +31,7 @@ class PicklesListener extends Listener {
   var name: String = _
   var description: String = _
   var tags: List[String] = List()
+  var featureTags: List[String] = List()
   var background: Option[Scenario] = None
   var scenarios: List[Scenario] = List()
   var scenarioOutlines: List[ScenarioOutline] = List()
@@ -43,7 +44,7 @@ class PicklesListener extends Listener {
   val featureElementState = new FeatureElementState
 
   def getFeature(): Feature = {
-    Feature(name, description, tags, background, scenarios, scenarioOutlines)
+    Feature(name, description, featureTags, background, scenarios, scenarioOutlines)
   }
 
   def addTagToElement(tag: String) = {
@@ -89,17 +90,15 @@ class PicklesListener extends Listener {
   }
 
   def tag(tag: String, line: Integer) = {
-    if (featureElementState.isFeatureActive) {
-      this.tags ::= tag
-    } else {
-      addTagToElement(tag)
-    }
+    this.tags ::= tag
   }
 
   def feature(keyword: String, name: String, description: String, line: Integer) = {
     featureElementState.setFeatureActive
     this.name = name
     this.description = description
+    this.tags.foreach { this.featureTags ::= _ }
+    this.tags = List()
   }
 
   def background(keyword: String, name: String, description: String, line: Integer) = {
@@ -108,6 +107,8 @@ class PicklesListener extends Listener {
     backgroundBuilder = new ScenarioBuilder
     backgroundBuilder.setName(name)
     backgroundBuilder.setDescription(description)
+    this.tags.foreach { backgroundBuilder.addTag(_) }
+    this.tags = List()
   }
 
   def scenario(keyword: String, name: String, description: String, line: Integer) = {
@@ -116,6 +117,8 @@ class PicklesListener extends Listener {
     scenarioBuilder = new ScenarioBuilder
     scenarioBuilder.setName(name)
     scenarioBuilder.setDescription(description)
+    this.tags.foreach { scenarioBuilder.addTag(_) }
+    this.tags = List()
   }
 
   def scenarioOutline(keyword: String, name: String, description: String, line: Integer) = {
@@ -124,6 +127,8 @@ class PicklesListener extends Listener {
     scenarioOutlineBuilder = new ScenarioOutlineBuilder
     scenarioOutlineBuilder.setName(name)
     scenarioOutlineBuilder.setDescription(description)
+    this.tags.foreach { scenarioOutlineBuilder.addTag(_) }
+    this.tags = List()
   }
 
   def examples(keyword: String, name: String, description: String, line: Integer) = {

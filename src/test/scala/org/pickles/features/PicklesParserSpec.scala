@@ -9,6 +9,7 @@ import org.pickles.crawler.FileSystemBuilder
 import java.io.PrintWriter
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import org.pickles.features.model.Keyword
 
 /**
  * @author jeffrey
@@ -81,25 +82,38 @@ class PicklesParserSpec extends FunSpec with ShouldMatchers {
 As a developer
 I want to  test the PicklesParser class to ensure it can properly read and parse content from a file""")
 
-      /*parsedFeature.getTags should have size (1)
-      parsedFeature.getTags.head should equal("@accepted")*/
+      parsedFeature.getTags should have size (1)
+      parsedFeature.getTags.head should equal("@accepted")
 
       parsedFeature.background should be('defined)
       val background = parsedFeature.background.get
       background should have(
         'name("Some facts about parsing"),
         'description("Here is some context about the background"))
+      background.getTags should have size (1)
+      background.getTags.head should be("@slow")
+      background.steps should have size (2)
 
       parsedFeature.scenarios should have size (1)
-      parsedFeature.scenarios.head should have(
+      val scenario = parsedFeature.scenarios.head
+      scenario should have(
         'name("A scenario"),
         'description("Here is some context about the scenario"))
+      scenario.getTags should have size (1)
+      scenario.getTags.head should be("@ignored")
+      scenario.steps should have size (3)
+      val table = scenario.steps.find({ _.keyword == Keyword.Given }).head.getTable
+      table.getRows should have size (2) // NOTE - this includes the header row
 
       parsedFeature.scenarioOutlines should have size (1)
-      parsedFeature.scenarioOutlines.head should have(
+      val scenarioOutline = parsedFeature.scenarioOutlines.head
+      scenarioOutline should have(
         'name("A scenario outline"),
         'description("Here is some context about the scenario outline"))
-
+      scenarioOutline.getTags should have size (1)
+      scenarioOutline.getTags.head should be("@outline")
+      scenarioOutline.steps should have size (3)
+      scenarioOutline.examples should have size (2)
     }
   }
 }

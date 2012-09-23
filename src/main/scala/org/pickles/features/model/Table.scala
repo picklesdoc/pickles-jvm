@@ -22,6 +22,7 @@ import scala.collection.immutable.List
 class Table {
   protected var rows: List[TableRow] = List()
   def addRow(row: TableRow) = rows ::= row
+  def getRows: Seq[TableRow] = rows
 }
 
 object Table {
