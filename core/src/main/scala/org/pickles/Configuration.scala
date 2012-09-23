@@ -17,15 +17,17 @@
 package org.pickles
 
 import org.apache.commons.vfs.FileObject
+import org.apache.commons.vfs.VFS
 
 class Configuration {
-  var featureFolder: FileObject = null
-  var outputFolder: FileObject = null
+  private val fileSystemManager = VFS.getManager()
+  var featureFolder: FileObject = fileSystemManager.resolveFile(System.getProperty("user.dir") + System.getProperty("file.separator"))
+  var outputFolder: FileObject = fileSystemManager.resolveFile(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator"))
   var documentationFormat: String = "HTML"
-  var language: String = ""
-  var testResultsFormat: String = null
-  var hasTestResults: Boolean = testResultsFile.isDefined
+  var language: String = System.getProperty("user.language")
+  var testResultsFormat: String = _
   var testResultsFile: Option[FileObject] = None
+  var hasTestResults: Boolean = testResultsFile.isDefined
   var systemUnderTestName: String = ""
   var systemUnderTestVersion: String = ""
 }
