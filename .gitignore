@@ -5,8 +5,10 @@
 *~
 
 #sbt
+target
 /project/target/
 /project/project/target
+/core/
 
 /target/
 /src/jline/target/
@@ -21,15 +23,15 @@
 /sandbox/
 
 # eclipse, intellij
-/.classpath
-/.project
-/.history
+.classpath
+.project
+.history
 /src/intellij/*.iml
 /src/intellij/*.ipr
 /src/intellij/*.iws
-/.cache
-/.idea
-/.settings
+.cache
+.idea
+.settings
 
 # bak files produced by ./cleanup-commit
 *.bak
