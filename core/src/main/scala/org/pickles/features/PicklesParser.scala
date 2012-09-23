@@ -28,6 +28,8 @@ import scala.io.BufferedSource
  *
  */
 class PicklesParser {
+  def isAllWhitespace(text: String) = text == "" || text.forall { _.isWhitespace }
+
   def parse(file: FileObject): Feature = {
     val listener = new PicklesListener
     val lexer = new I18nLexer(listener)
@@ -38,7 +40,12 @@ class PicklesParser {
     var content: Option[String] = None
     try {
       contentSource = io.Source.fromInputStream(contentStream)
-      content = Some(contentSource.mkString)
+      val contentText = contentSource.mkString
+      if (isAllWhitespace(contentText)) {
+        content = None
+      } else {
+        content = Some(contentText)
+      }
     } finally {
       if (contentSource != null) { contentSource.close }
       contentStream.close

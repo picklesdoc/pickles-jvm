@@ -128,5 +128,55 @@ I want to  test the PicklesParser class to ensure it can properly read and parse
       scenarioOutline.steps should have size (3)
       scenarioOutline.examples should have size (2)
     }
+
+    it("should be able to parse a feature file with no scenarios") {
+      val feature =
+        """
+        @accepted
+        Feature: A test feature
+          In order to ensure all features are properly parsed
+          As a developer
+          I want to  test the PicklesParser class to ensure it can properly read and parse content from a file
+        """
+
+      val builder = FileSystemBuilder.build()
+      val featureFile = builder.addFile("ram://feature.txt")
+      val featureFileOutputStream = featureFile.getContent().getOutputStream()
+      val writer = new PrintWriter(featureFileOutputStream)
+      writer.write(feature)
+      writer.flush()
+      writer.close()
+      featureFileOutputStream.close()
+
+      val parser = new PicklesParser()
+      val parsedFeature = parser.parse(featureFile)
+
+      parsedFeature should not be (null)
+      parsedFeature.name should equal("A test feature")
+      parsedFeature.description should equal(
+        """In order to ensure all features are properly parsed
+As a developer
+I want to  test the PicklesParser class to ensure it can properly read and parse content from a file""")
+
+      parsedFeature.getTags should have size (1)
+      parsedFeature.getTags.head should equal("@accepted")
+    }
+
+    it("should throw an exception when given an empty file") {
+      val feature = "      "
+
+      val builder = FileSystemBuilder.build()
+      val featureFile = builder.addFile("ram://feature.txt")
+      val featureFileOutputStream = featureFile.getContent().getOutputStream()
+      val writer = new PrintWriter(featureFileOutputStream)
+      writer.write(feature)
+      writer.flush()
+      writer.close()
+      featureFileOutputStream.close()
+
+      val parser = new PicklesParser()
+      evaluating { parser.parse(featureFile) } should produce[ParseException]
+
+    }
   }
 }
