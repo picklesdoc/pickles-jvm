@@ -2,10 +2,10 @@ name := "pickles-jvm"
 
 version := "0.1"
 
-scalaVersion := "2.10.0-RC2"
+scalaVersion := "2.10.0"
 
 libraryDependencies ++= Seq(
-	"org.scalatest" % "scalatest_2.10.0-RC2" % "2.0.M5",
+	"org.scalatest" % "scalatest_2.10" % "1.9.1" % "test",
 	"info.cukes" % "gherkin" % "2.11.2",
 	"junit" % "junit" % "4.10",
 	"commons-vfs" % "commons-vfs" % "1.0",
