@@ -1,4 +1,4 @@
-name := "pickles-jvm"
+name := "pickles-jvm-core"
 
 version := "0.1"
 
